@@ -1,4 +1,4 @@
-package br.com.erudio.models;
+package br.com.erudio.data.models;
 
 import org.springframework.stereotype.Service;
 
