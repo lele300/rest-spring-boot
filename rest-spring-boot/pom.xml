@@ -41,13 +41,16 @@
 		</dependency>
         
         <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
         </dependency>  
         
-        <dependecy>
-        	
-        </dependecy>
+        <dependency>
+		    <groupId>com.github.dozermapper</groupId>
+		    <artifactId>dozer-core</artifactId>
+		    <version>6.5.0</version>
+		</dependency>
+      
   </dependencies>
   
   <build>
