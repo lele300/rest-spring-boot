@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.erudio.exception.UnsuportedMathOperationException;
-import br.com.erudio.models.SimpleMath;
 import br.com.erudio.converters.NumberConverter;
+import br.com.erudio.data.models.SimpleMath;
 
 @RequestMapping("/math")
 @RestController
