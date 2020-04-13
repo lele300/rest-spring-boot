@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.erudio.converters.DozerConverter;
 import br.com.erudio.data.models.Person;
+import br.com.erudio.data.vo.PersonVO;
 import br.com.erudio.exception.ResourceNotFoundException;
 import br.com.erudio.repositories.PersonRepository;
 
@@ -15,20 +17,23 @@ public class PersonService {
 	@Autowired
 	private PersonRepository repository;
 	
-	public Person create(Person person) {
-		return repository.save(person);
+	public PersonVO create(PersonVO personVO) {
+		var entity = DozerConverter.parseObject(personVO, Person.class);
+		var vo = DozerConverter.parseObject(repository.save(entity), PersonVO.class);
+		return vo;
 	}
 	
-	public Person update(Person person) {
-		Person personFromDb = repository.findById(person.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("No records found for id " + person.getId()));
+	public PersonVO update(PersonVO personVO) {
+		var entity = DozerConverter.parseObject(personVO, Person.class);
+		Person entityFromDb = repository.findById(entity.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("No records found for id " + personVO.getId()));
 		
-		personFromDb.setFirstName(person.getFirstName());
-		personFromDb.setLastName(person.getLastName());
-		personFromDb.setAddress(person.getAddress());
-		personFromDb.setGender(person.getGender());
+		entityFromDb.setFirstName(personVO.getFirstName());
+		entityFromDb.setLastName(personVO.getLastName());
+		entityFromDb.setAddress(personVO.getAddress());
+		entityFromDb.setGender(personVO.getGender());
 		
-		return repository.save(personFromDb);
+		return DozerConverter.parseObject(repository.save(entity), PersonVO.class);
 	}
 	
 	public void delete(Long id) {
@@ -38,12 +43,13 @@ public class PersonService {
 		repository.delete(personFromDb);
 	}
 	
-	public Person findById(Long id) {
-		return repository.findById(id)
+	public PersonVO findById(Long id) {
+		var entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for id " + id));
+		return DozerConverter.parseObject(entity, PersonVO.class);			
 	}
 	
-	public List<Person> findAll() {
-		return repository.findAll();
+	public List<PersonVO> findAll() {
+		return DozerConverter.parseListObjects(repository.findAll(), PersonVO.class);
 	}
 }
