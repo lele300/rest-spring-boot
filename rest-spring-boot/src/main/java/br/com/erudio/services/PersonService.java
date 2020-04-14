@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.erudio.converters.DozerConverter;
+import br.com.erudio.converters.custom.PersonConverter;
 import br.com.erudio.data.models.Person;
 import br.com.erudio.data.vo.PersonVO;
+import br.com.erudio.data.vo.v2.PersonVOVersion2;
 import br.com.erudio.exception.ResourceNotFoundException;
 import br.com.erudio.repositories.PersonRepository;
 
@@ -17,10 +19,18 @@ public class PersonService {
 	@Autowired
 	private PersonRepository repository;
 	
+	@Autowired
+	PersonConverter converter;
+	
 	public PersonVO create(PersonVO personVO) {
 		var entity = DozerConverter.parseObject(personVO, Person.class);
 		var vo = DozerConverter.parseObject(repository.save(entity), PersonVO.class);
 		return vo;
+	}
+	
+	public PersonVOVersion2 createVersion2(PersonVOVersion2 personVOVersion2) {
+		var entity = converter.convertVOToEntity(personVOVersion2);
+		return converter.convertEntityToVO(repository.save(entity));
 	}
 	
 	public PersonVO update(PersonVO personVO) {
